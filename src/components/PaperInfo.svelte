@@ -3,8 +3,7 @@
   export let paper;
 
   const setPaper = () => {
-    // TODO: Set ID
-    currentSearch.set(paper.title);
+    currentSearch.set(`id:${paper.id}`);
   }
 
   $: authors = paper.authors.map(a => a.author.name).join(", ");

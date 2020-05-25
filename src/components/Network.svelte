@@ -30,11 +30,12 @@
 
     process_paper(root, p => {
       const group = p == root ? 1 : 2;
+      const value = p.num_citations;
       papers[p.id] = p;
       nodes.push({
         id: p.id,
         title: makeTitle(p),
-        value: p.num_citations || 0,
+        value,
         group
       });
       (p.cites || []).forEach(cited =>
