@@ -1,104 +1,70 @@
-<script context="module">
-  export async function preload(page, session) {
-    const title = "Mastering Atari, Go, Chess and Shogi by Planning";
-    const res = await this.fetch(
-      `/paper.json?title=${encodeURIComponent(title)}`
-    );
-    const data = await res.json();
-    return { data };
-  }
-</script>
-
 <script>
-  export let data;
-  import _ from "lodash";
-	import { DataSet, Network } from "vis-network/standalone";
-	import { onMount } from "svelte";
+  import { subgraph, selectedPaper, currentSearch } from "../stores";
+  import { onMount } from "svelte";
+  import Network from "../components/Network.svelte";
+  import PaperInfo from "../components/PaperInfo.svelte";
+  // let title = "Mastering Atari, Go, Chess and Shogi by Planning";
+  let data = new Promise(() => {});
 
-  const process_paper = (paper, fn) => {
-    fn(paper);
-    if (!paper.cites) {
-      return;
-    }
-    paper.cites.forEach(cited => process_paper(cited, fn));
-  };
-
-  let nodes = [];
-	let edges = [];
-	
-	const root = data.papers[0];
-
-  process_paper(root, p => {
-		const group = (p == root ? 1 : 2);
-    nodes.push({ id: p.id, title: p.title, value: p.num_citations || 0, group });
-    (p.cites || []).forEach(cited =>
-      edges.push({ from: p.id, to: cited.id, arrows: "to" })
-    );
+	$: tbText = $currentSearch;
+  currentSearch.subscribe(data => {
+    getData();
   });
 
-  nodes = _.uniqBy(nodes, p => p.id);
-
+  async function getData() {
+    const res = await fetch(
+      `/paper.json?title=${encodeURIComponent($currentSearch)}`
+    );
+    data = await res.json();
+    subgraph.set(data);
+  }
 
   onMount(async () => {
-
-    var container = document.getElementById("network");
-    var data = {
-      nodes: nodes,
-      edges: edges
-    };
-    var options = {
-			nodes: {
-				shape: "dot",
-			},
-			groups: {
-				1: {
-					color: "#FEB2B2",
-				},
-				2: {
-					color: "#90CDF4",
-				}
-			},
-			physics: {
-				stabilization: {
-					iterations: 200,
-				}
-			},
-			// layout: {
-			// 	hierarchical: true,
-			// }
-      // layout: {
-      //   hierarchical: {
-      //     direction: "UD",
-      //     sortMethod: "directed"
-      //   }
-      // }
-      // physics: {
-      //   stabilization: true,
-      //   // barnesHut: {
-      //   //   gravitationalConstant: -80000,
-      //   //   springConstant: 0.001,
-      //   //   springLength: 200
-      //   // }
-      // }
-    };
-    var network = new Network(container, data, options);
-
-    // const res = await fetch(`https://jsonplaceholder.typicode.com/photos?_limit=20`);
-    // photos = await res.json();
+    data = await getData();
+    console.log(data);
   });
-</script>
 
-<style>
-  #network {
-  width: 600px;
-  height: 600px;
+  function onTitleChange() {
+		currentSearch.set(tbText);
+    console.log(`fetching ${$currentSearch}`);
+    getData();
   }
-</style>
+</script>
 
 <svelte:head>
   <title>Home</title>
 </svelte:head>
 
-<!-- <p>Hello World</p> -->
+<div class="w-full h-full block flex flex-row">
+  <div class="w-1/4 border-r pr-8">
+    <div>
+      <input
+        class="border border-gray-400 px-4 py-2 w-full shadow-none outline-none"
+        bind:value={tbText}
+        on:change={onTitleChange} />
+      <div class="text-gray-500 text-xs mt-1">
+        Input a (partial) paper title and press enter to search. You can also
+        enter a Semantic Scholar ID. The first result will become the root node.
+      </div>
+      <!-- {#if $subgraph}
+        <p class="text-sm mt-2">
+          <strong>Loaded:</strong>
+          {$subgraph.papers[0].title}
+        </p>
+      {/if} -->
+    </div>
+    <div class="mt-2 pt-2">
+      {#if $selectedPaper}
+        <PaperInfo paper={$selectedPaper} />
+      {/if}
+    </div>
+  </div>
+  <div class="w-3/4">
+    {#if $subgraph}
+      <div class="w-full h-full block">
+        <Network />
+      </div>
+    {/if}
+  </div>
 
-<div id="network" />
+</div>

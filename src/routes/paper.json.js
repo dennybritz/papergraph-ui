@@ -6,6 +6,12 @@ const QUERY = gql`
   fragment paper_fields on papers {
     id
     title
+    authors {
+      author { 
+        name
+      }
+    }
+    paper_abstract
     year
     doi_url
     s2_url
@@ -25,7 +31,6 @@ const QUERY = gql`
   }
 `;
 
-const TITLE = "%Mastering Atari, Go, Chess and Shogi by Planning%";
 
 export async function get(req, res, next) {
   const client = new ApolloClient({

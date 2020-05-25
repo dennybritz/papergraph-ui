@@ -1,3 +1,13 @@
 @tailwind base;
+
+a {
+  @apply text-blue-600;
+}
+
+div {
+  @apply outline-none;
+  @apply shadow-none;
+}
+
 @tailwind components;
 @tailwind utilities;
