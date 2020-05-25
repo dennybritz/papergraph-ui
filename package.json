@@ -1,11 +1,13 @@
 {
-  "name": "TODO",
-  "description": "TODO",
+  "name": "papergraph-ui",
+  "description": "papergraph-ui",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
-    "build": "sapper build --legacy",
-    "export": "sapper export --legacy",
+    "css:watch": "postcss static/tailwind.css -o static/build.css -w",
+    "css:build": "NODE_ENV=production postcss static/tailwind.css -o static/index.css",
+    "build": "yarn css:build && sapper build --legacy",
+    "export": "yarn css:build && sapper export --legacy",
     "start": "node __sapper__/build",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
@@ -27,15 +29,18 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/runtime": "^7.0.0",
+    "@fullhuman/postcss-purgecss": "^2.2.0",
     "@rollup/plugin-babel": "^5.0.0",
     "@rollup/plugin-commonjs": "^12.0.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
     "@rollup/plugin-replace": "^2.2.0",
     "npm-run-all": "^4.1.5",
+    "postcss-cli": "^7.1.1",
     "rollup": "^2.3.4",
     "rollup-plugin-svelte": "^5.0.1",
     "rollup-plugin-terser": "^5.3.0",
     "sapper": "^0.27.0",
-    "svelte": "^3.0.0"
+    "svelte": "^3.0.0",
+    "tailwindcss": "^1.4.6"
   }
 }

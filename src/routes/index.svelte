@@ -60,12 +60,12 @@
 			},
 			physics: {
 				stabilization: {
-					iterations: 100,
+					iterations: 200,
 				}
 			},
-			layout: {
-				hierarchical: true,
-			}
+			// layout: {
+			// 	hierarchical: true,
+			// }
       // layout: {
       //   hierarchical: {
       //     direction: "UD",

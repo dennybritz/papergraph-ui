@@ -15,9 +15,9 @@ const QUERY = gql`
   query papers($title: String!) {
     papers(limit: 1, where: { title: { _like: $title } }, offset: 0) {
       ...paper_fields
-      cites(args: { limit_: 20 }) {
+      cites(args: { limit_: 10 }) {
         ...paper_fields
-        cites(args: { limit_: 20 }) {
+        cites(args: { limit_: 10 }) {
           ...paper_fields
         }
       }
