@@ -4,6 +4,7 @@
   import Network from "../components/Network.svelte";
   import PaperInfo from "../components/PaperInfo.svelte";
   import SideBar from "../components/SideBar.svelte";
+  import Meta from "../components/Meta.svelte";
 
   function onTitleChange(e) {
     currentSearch.set(e.target.value);
@@ -15,11 +16,10 @@
     ["ResNet", "id:2c03df8b48bf3fa39054345bafabfeff15bfd11d"],
     ["BERT", "id:df2b0e26d0599ce3e70df8a9da02e51594e0e992"]
   ];
+  
 </script>
 
-<svelte:head>
-  <title>Home</title>
-</svelte:head>
+<Meta title="papergraph - {$currentSearch}"/>
 
 <div class="w-full h-full flex flex-row">
   <div class="w-1/4 border-r pr-8 mr-8 flex flex-col h-full">
@@ -50,7 +50,7 @@
       </div>
     </div>
     <div class="w-full h-full block">
-      <Network />    
+      <Network />
     </div>
 
   </div>
