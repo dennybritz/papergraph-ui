@@ -1,50 +1,49 @@
 <script>
-  import { subgraph, selectedPaper } from "../stores";
+  import { currentSubGraph, selectedPaper, currentSearch } from "../stores";
   import _ from "lodash";
   import { DataSet, Network } from "vis-network/standalone";
   import { onMount } from "svelte";
 
-  let nodes = [];
-  let edges = [];
-  let papers = {};
+  let network;
+  let graph_data;
+  let is_updating = true;
 
-  const process_paper = (paper, fn) => {
-    fn(paper);
-    if (!paper.cites) {
-      return;
-    }
-    paper.cites.forEach(cited => process_paper(cited, fn));
+  const makeTitle = paper => {
+    return `${paper.title} [${paper.year}] [${paper.num_citations} citations]`;
   };
 
-  const makeTitle = (paper) => {
-    return `${paper.title} [${paper.year}] [${paper.num_citations} citations]`;
-  }
+  selectedPaper.subscribe(paper => {
+    if (network && network.findNode(paper.id).length > 0) {
+      network.selectNodes([paper.id]);
+    }
+  });
+
+  currentSearch.subscribe(_newSearch => {
+    is_updating = true;
+    console.log(_newSearch);
+    // if (network) {
+    //   network.destroy();
+    // }
+  });
 
   const updateGraph = data => {
-    const root = data.papers[0];
-
-    selectedPaper.set(root);
-
-    nodes = [];
-    edges = [];
-
-    process_paper(root, p => {
-      const group = p == root ? 1 : 2;
-      const value = p.num_citations;
-      papers[p.id] = p;
-      nodes.push({
-        id: p.id,
-        title: makeTitle(p),
+    is_updating = true;
+    const nodes = Object.entries(data.papers).map(([id, paper]) => {
+      const group = paper.isRoot ? 1 : 2;
+      const value = paper.num_citations;
+      return {
+        id,
+        title: makeTitle(paper),
         value,
         group
-      });
-      (p.cites || []).forEach(cited =>
-        edges.push({ from: p.id, to: cited.id, arrows: "to" })
-      );
+      };
     });
-    nodes = _.uniqBy(nodes, p => p.id);
 
-    var graph_data = {
+    const edges = Array.from(data.citations).map(({ from, to }) => {
+      return { from, to, arrows: "to" };
+    });
+
+    graph_data = {
       nodes: nodes,
       edges: edges
     };
@@ -85,25 +84,32 @@
       // }
     };
     var container = document.getElementById("network");
-    var network = new Network(container, graph_data, options);
+    network = new Network(container, graph_data, options);
+
+    window.network = network;
 
     network.on("click", function(params) {
       const nodeId = this.getNodeAt(params.pointer.DOM);
       if (nodeId) {
-        const paper = papers[nodeId];
+        const paper = $currentSubGraph.papers[nodeId];
         selectedPaper.set(paper);
       }
-    })
+    });
+
+    is_updating = false;
   };
 
   onMount(async () => {
-    subgraph.subscribe(data => {
+    currentSubGraph.subscribe(data => {
       data && updateGraph(data);
     });
   });
-
-
-
 </script>
 
-<div id="network" class="w-full h-full" />
+{#if is_updating}
+  <div class="w-full h-full text-center">
+    <i class="las la-circle-notch la-spin la-2x text-gray-400 my-16" />
+  </div>
+{/if}
+
+<div hidden={is_updating} id="network" class="w-full h-full" />

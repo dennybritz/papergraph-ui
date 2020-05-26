@@ -1,32 +1,13 @@
 <script>
-  import { subgraph, selectedPaper, currentSearch } from "../stores";
+  import { selectedPaper, currentSearch, currentSubGraph } from "../stores";
   import { onMount } from "svelte";
   import Network from "../components/Network.svelte";
   import PaperInfo from "../components/PaperInfo.svelte";
+  import SideBar from "../components/SideBar.svelte";
 
-  $: tbText = $currentSearch;
-  currentSearch.subscribe(data => {
-    getData();
-  });
-
-  async function getData() {
-    const res = await fetch(
-      `/paper.json?title=${encodeURIComponent($currentSearch)}`
-    );
-    let data = await res.json();
-    subgraph.set(data);
-    return data;
-  }
-
-  onMount(async () => {
-    let data = await getData();
-    console.log(data);
-  });
-
-  function onTitleChange() {
-    currentSearch.set(tbText);
-    console.log(`fetching ${$currentSearch}`);
-    getData();
+  function onTitleChange(e) {
+    currentSearch.set(e.target.value);
+    console.log(`fetching: ${$currentSearch}`);
   }
 </script>
 
@@ -35,41 +16,14 @@
 </svelte:head>
 
 <div class="w-full h-full flex flex-row">
-  <div class="w-1/4 border-r pr-8 mr-8 flex flex-col">
-    <div class="mb-2 text-xs pb-2">
-      <button
-        class="inline font-bold text-blue-600 uppercase pb-1 border-gray-400
-        border-b-2">
-        Details
-      </button>
-      <button class="inline font-bold text-blue-600 uppercase ml-4">
-        List
-      </button>
-      <button class="inline font-bold text-blue-600 uppercase ml-4">
-        Examples
-      </button>	
-      <button class="inline font-bold text-blue-600 uppercase ml-4">
-        Options
-      </button>						
-      <button class="inline font-bold text-blue-600 uppercase ml-4">
-        Help
-      </button>
-    </div>
-    <div class="mt-2 flex-1">
-      {#if $selectedPaper}
-        <PaperInfo paper={$selectedPaper} />
-      {/if}
-    </div>
-    <div class="text-gray-500 text-xs mt-4">
-      Built with ❤️ by
-      <a href="https://twitter.com/dennybritz" target="_blank">@dennybritz</a>
-    </div>
+  <div class="w-1/4 border-r pr-8 mr-8 flex flex-col h-full">
+    <SideBar />
   </div>
   <div class="w-3/4 flex flex-col">
     <div class="mb-4">
       <input
         class="border border-gray-400 px-4 py-2 w-full shadow-none outline-none"
-        bind:value={tbText}
+        value={$currentSearch}
         on:change={onTitleChange} />
       <div class="text-gray-500 text-xs mt-1">
         Input a (partial) paper title and press enter to search. You can also
@@ -77,8 +31,21 @@
         <pre class="inline">id:</pre>
         prefix. The first result will become the root node.
       </div>
+      <div class="text-gray-500 text-xs mt-1">
+        Try:
+        <button
+          class="text-blue-600"
+          on:click={() => currentSearch.set('id:ff332c21562c87cab5891d495b7d0956f2d9228b')}>
+          World Models
+        </button>
+        <button
+          class="text-blue-600 ml-1"
+          on:click={() => currentSearch.set('id:2c03df8b48bf3fa39054345bafabfeff15bfd11d')}>
+          ResNet
+        </button>        
+      </div>
     </div>
-    {#if $subgraph}
+    {#if $currentSubGraph}
       <div class="w-full h-full block">
         <Network />
       </div>

@@ -4,7 +4,7 @@ a {
   @apply text-blue-600;
 }
 
-div, button {
+div, button, button:focus {
   @apply outline-none;
   @apply shadow-none;
 }
