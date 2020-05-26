@@ -121,7 +121,7 @@
   </div>
 {/if}
 
-{#if !$isLoading && !$currentSubGraph}
+{#if !$isLoading && !$currentSubGraph && $currentSearch}
   <div>No data found.</div>
 {/if}
 

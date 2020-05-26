@@ -13,12 +13,17 @@ const each_node = (paper, fn) => {
 export const isLoading = writable(false);
 
 export const currentSearch = writable(
-  "Mastering Atari, Go, Chess and Shogi by Planning"
+  null
 );
 
 export const currentSubGraph = derived(
   currentSearch,
   async ($currentSearch, set) => {
+    if (!$currentSearch) {
+      set(null);
+      return;
+    }
+
     isLoading.set(true);
     const res = await fetch(
       `/paper.json?title=${encodeURIComponent($currentSearch)}`
