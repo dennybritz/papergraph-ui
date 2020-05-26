@@ -13,7 +13,7 @@ const each_node = (paper, fn) => {
 export const isLoading = writable(false);
 
 export const currentSearch = writable(
-  "Mastering Atari, Go, Chess and Shogi by Planning!!"
+  "Mastering Atari, Go, Chess and Shogi by Planning"
 );
 
 export const currentSubGraph = derived(

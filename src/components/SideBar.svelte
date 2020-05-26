@@ -55,7 +55,10 @@
 
   <div class="text-gray-500 text-xs mt-4">
     Built with ❤️ by
-    <a href="https://twitter.com/dennybritz" target="_blank">@dennybritz</a>
+    <a href="https://twitter.com/dennybritz" target="_blank">@dennybritz</a> | 
+    <a href="https://github/dennybritz/papergraph-ui" target="_blank">github</a> | 
+    <a href="http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/corpus/" target="_blank">data</a>
+
   </div>
 
 </div>

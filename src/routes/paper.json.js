@@ -32,9 +32,9 @@ const ID_QUERY = gql`
   query papers($id: String!) {
     papers(limit: 1, where: { id: { _eq: $id } }, offset: 0) {
       ...paper_fields
-      cites(args: { limit_: 20 }) {
+      cites(args: { limit_: 10 }) {
         ...paper_fields
-        cites(args: { limit_: 20 }) {
+        cites(args: { limit_: 10 }) {
           ...paper_fields
         }
       }
@@ -47,9 +47,9 @@ const TITLE_QUERY = gql`
   query papers($title: String!) {
     papers(limit: 1, where: { title: { _like: $title } }, offset: 0) {
       ...paper_fields
-      cites(args: { limit_: 20 }) {
+      cites(args: { limit_: 10 }) {
         ...paper_fields
-        cites(args: { limit_: 20 }) {
+        cites(args: { limit_: 10 }) {
           ...paper_fields
         }
       }

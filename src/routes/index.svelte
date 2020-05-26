@@ -42,7 +42,7 @@
         {#each examples as [name, search]}
           <button
             class="text-blue-600"
-            class:ml-1="{search !== examples[0][1]}"
+            class:ml-1={search !== examples[0][1]}
             on:click={() => currentSearch.set(search)}>
             [{name}]
           </button>
@@ -50,8 +50,9 @@
       </div>
     </div>
     <div class="w-full h-full block">
-      <Network />
+      <Network />    
     </div>
+
   </div>
 
 </div>
