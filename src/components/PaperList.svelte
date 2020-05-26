@@ -12,7 +12,7 @@
 </script>
 
 <div>
-  <div class="font-bold mb-3">{papersByCitations.length} papers in the subgraph</div>
+  <div class="font-bold mb-3">{papersByCitations.length} papers in subgraph</div>
   {#each papersByCitations as paper}
     <div class="mt-1 text-xs">
       <button

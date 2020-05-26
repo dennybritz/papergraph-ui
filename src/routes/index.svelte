@@ -9,6 +9,12 @@
     currentSearch.set(e.target.value);
     console.log(`fetching: ${$currentSearch}`);
   }
+
+  let examples = [
+    ["World Models", "id:ff332c21562c87cab5891d495b7d0956f2d9228b"],
+    ["ResNet", "id:2c03df8b48bf3fa39054345bafabfeff15bfd11d"],
+    ["BERT", "id:df2b0e26d0599ce3e70df8a9da02e51594e0e992"]
+  ];
 </script>
 
 <svelte:head>
@@ -33,16 +39,14 @@
       </div>
       <div class="text-gray-500 text-xs mt-1">
         Try:
-        <button
-          class="text-blue-600"
-          on:click={() => currentSearch.set('id:ff332c21562c87cab5891d495b7d0956f2d9228b')}>
-          World Models
-        </button>
-        <button
-          class="text-blue-600 ml-1"
-          on:click={() => currentSearch.set('id:2c03df8b48bf3fa39054345bafabfeff15bfd11d')}>
-          ResNet
-        </button>        
+        {#each examples as [name, search]}
+          <button
+            class="text-blue-600"
+            class:ml-1="{search !== examples[0][1]}"
+            on:click={() => currentSearch.set(search)}>
+            [{name}]
+          </button>
+        {/each}
       </div>
     </div>
     {#if $currentSubGraph}

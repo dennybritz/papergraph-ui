@@ -13,17 +13,16 @@
   };
 
   selectedPaper.subscribe(paper => {
-    if (network && network.findNode(paper.id).length > 0) {
+    if (!is_updating && network && network.findNode(paper.id).length > 0) {
       network.selectNodes([paper.id]);
     }
   });
 
   currentSearch.subscribe(_newSearch => {
     is_updating = true;
-    console.log(_newSearch);
-    // if (network) {
-    //   network.destroy();
-    // }
+    if (network) {
+      network.destroy();
+    }
   });
 
   const updateGraph = data => {
@@ -96,7 +95,11 @@
       }
     });
 
-    is_updating = false;
+    network.once("stabilizationIterationsDone", function() {
+      is_updating = false;
+    });
+
+    
   };
 
   onMount(async () => {
@@ -107,9 +110,12 @@
 </script>
 
 {#if is_updating}
-  <div class="w-full h-full text-center">
-    <i class="las la-circle-notch la-spin la-2x text-gray-400 my-16" />
+  <div class="w-full text-left">
+    <i class="las la-circle-notch la-spin la-2x text-gray-400" />
   </div>
 {/if}
 
-<div hidden={is_updating} id="network" class="w-full h-full" />
+<div  class="w-full h-full">
+  <div id="network" class="w-full h-full" />
+</div>
+
