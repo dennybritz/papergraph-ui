@@ -49,11 +49,9 @@
         {/each}
       </div>
     </div>
-    {#if $currentSubGraph}
-      <div class="w-full h-full block">
-        <Network />
-      </div>
-    {/if}
+    <div class="w-full h-full block">
+      <Network />
+    </div>
   </div>
 
 </div>

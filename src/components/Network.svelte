@@ -1,32 +1,34 @@
 <script>
-  import { currentSubGraph, selectedPaper, currentSearch } from "../stores";
+  import { currentSubGraph, selectedPaper, currentSearch, isLoading } from "../stores";
   import _ from "lodash";
   import { DataSet, Network } from "vis-network/standalone";
   import { onMount } from "svelte";
 
   let network;
   let graph_data;
-  let is_updating = true;
+  let isUpdatingGraph = false;
+
+  $: hideGraph = $isLoading || isUpdatingGraph;
 
   const makeTitle = paper => {
     return `${paper.title} [${paper.year}] [${paper.num_citations} citations]`;
   };
 
   selectedPaper.subscribe(paper => {
-    if (!is_updating && network && network.findNode(paper.id).length > 0) {
+    // TODO: Fix this
+    try {
       network.selectNodes([paper.id]);
-    }
+    } catch {}
   });
 
   currentSearch.subscribe(_newSearch => {
-    is_updating = true;
     if (network) {
       network.destroy();
     }
   });
 
   const updateGraph = data => {
-    is_updating = true;
+    isUpdatingGraph = true;
     const nodes = Object.entries(data.papers).map(([id, paper]) => {
       const group = paper.isRoot ? 1 : 2;
       const value = paper.num_citations;
@@ -96,26 +98,35 @@
     });
 
     network.once("stabilizationIterationsDone", function() {
-      is_updating = false;
+      isUpdatingGraph = false;
     });
 
+    $selectedPaper && network.selectNodes([$selectedPaper.id]);
     
   };
 
   onMount(async () => {
     currentSubGraph.subscribe(data => {
-      data && updateGraph(data);
+      if(data) {
+        updateGraph(data);
+      }
     });
   });
 </script>
 
-{#if is_updating}
+
+{#if hideGraph}
   <div class="w-full text-left">
     <i class="las la-circle-notch la-spin la-2x text-gray-400" />
   </div>
 {/if}
 
-<div  class="w-full h-full">
+{#if !$isLoading && !$currentSubGraph}
+  <div>No data found.</div>
+{/if}
+
+
+<div class="w-full h-full">
   <div id="network" class="w-full h-full" />
 </div>
 

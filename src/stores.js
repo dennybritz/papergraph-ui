@@ -10,17 +10,27 @@ const each_node = (paper, fn) => {
   paper.cites.forEach(cited => each_node(cited, fn));
 };
 
+export const isLoading = writable(false);
+
 export const currentSearch = writable(
-  "Mastering Atari, Go, Chess and Shogi by Planning"
+  "Mastering Atari, Go, Chess and Shogi by Planning!!"
 );
 
 export const currentSubGraph = derived(
   currentSearch,
   async ($currentSearch, set) => {
+    isLoading.set(true);
     const res = await fetch(
       `/paper.json?title=${encodeURIComponent($currentSearch)}`
     );
     let data = await res.json();
+    
+    if (data.papers.length == 0) {
+      selectedPaper.set(null);
+      set(null);
+      isLoading.set(false);
+      return;
+    }
 
     // Flatten the graph structure
     const root = data.papers[0];
@@ -38,12 +48,13 @@ export const currentSubGraph = derived(
       });
 
       set({ papers, citations });
+      isLoading.set(false);
     }
   }
 );
 
-export const incomingCitations = derived(currentSubGraph, ({ citations }) => {
-  return _.countBy(citations, "to");
+export const incomingCitations = derived(currentSubGraph, (csg) => {
+  return csg ? _.countBy(csg.citations, "to") : {};
 });
 
 export const selectedPaper = writable(null);
