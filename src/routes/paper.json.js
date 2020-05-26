@@ -23,6 +23,7 @@ const PAPER_FIELDS = `
     year
     doi_url
     s2_url
+    pdf_urls
     num_citations
   }
 `;
