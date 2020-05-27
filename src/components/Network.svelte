@@ -73,7 +73,7 @@
       },
       physics: {
         stabilization: {
-          iterations: 200
+          iterations: 500
         }
       },
       layout: {
