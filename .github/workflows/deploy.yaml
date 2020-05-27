@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: export
+        run: |
+          yarn run export
+
+      - name: Publish to Netlify
+        uses: netlify/actions/cli@master
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        with:
+          args: deploy --dir=__sapper__/export/

@@ -5,7 +5,6 @@
     currentSearch,
     isLoading
   } from "../stores";
-  import _ from "lodash";
   import { DataSet, Network } from "vis-network/standalone";
   import { onMount } from "svelte";
 

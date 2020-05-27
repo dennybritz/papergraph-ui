@@ -1,5 +1,5 @@
 import { writable, derived } from "svelte/store";
-import _ from "lodash";
+import countBy from "lodash/countBy";
 import { getPaper } from "./db";
 
 // recursively apply a function to each paper node
@@ -64,7 +64,7 @@ export const currentSubGraph = derived(
 );
 
 export const incomingCitations = derived(currentSubGraph, (csg) => {
-  return csg ? _.countBy(csg.citations, "to") : {};
+  return csg ? countBy(csg.citations, "to") : {};
 });
 
 export const selectedPaper = writable(null);
