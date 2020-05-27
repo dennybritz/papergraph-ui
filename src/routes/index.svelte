@@ -32,9 +32,12 @@
   });
 
   let examples = [
+    ["ResNet", "Deep Residual Learning for Image Recognition"],
+    ["BERT", "Pre-training of Deep Bidirectional Transformers for Language Understanding"],
+    ["EfficientNet", "EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks"],
     ["World Models", "id:ff332c21562c87cab5891d495b7d0956f2d9228b"],
-    ["ResNet", "id:2c03df8b48bf3fa39054345bafabfeff15bfd11d"],
-    ["BERT", "id:df2b0e26d0599ce3e70df8a9da02e51594e0e992"]
+    ["GPT-2", "Language Models are Unsupervised Multitask Learners"],
+    ["Lottery", "The Lottery Ticket Hypothesis: Finding Sparse"],
   ];
 </script>
 
