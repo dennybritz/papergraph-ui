@@ -3,6 +3,7 @@ This is the frontend for [dennybritz/papergraph](https://github.com/dennybritz/p
 Technologies used:
 
 - [sapper](https://sapper.svelte.dev/) + [svelte](https://svelte.dev/) for static site generation
+- [visjs](https://visjs.org/) for network visualizations
 - [tailwindcss](https://tailwindcss.com/) for styling
 - [dennybritz/papergraph](https://github.com/dennybritz/papergraph) for the data
 
