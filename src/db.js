@@ -12,7 +12,7 @@ fragment paper_fields on papers {
   id
   title
   authors {
-    author { 
+    author {
       name
     }
   }
@@ -40,6 +40,21 @@ export const ID_QUERY = gql`
   }
 `;
 
+export const ID_QUERY_REV = gql`
+  ${PAPER_FIELDS}
+  query papers($id: String!) {
+    papers(limit: 1, where: { id: { _eq: $id } }, offset: 0) {
+      ...paper_fields
+      cites: cited_by(args: { limit_: ${MAX_CITATIONS_PER_PAPER} }) {
+        ...paper_fields
+        cites: cited_by(args: { limit_: ${MAX_CITATIONS_PER_PAPER} }) {
+          ...paper_fields
+        }
+      }
+    }
+  }
+`;
+
 export const TITLE_QUERY = gql`
   ${PAPER_FIELDS}
   query papers($title: String!) {
@@ -48,6 +63,21 @@ export const TITLE_QUERY = gql`
       cites(args: { limit_: ${MAX_CITATIONS_PER_PAPER} }) {
         ...paper_fields
         cites(args: { limit_: ${MAX_CITATIONS_PER_PAPER} }) {
+          ...paper_fields
+        }
+      }
+    }
+  }
+`;
+
+export const TITLE_QUERY_REV = gql`
+  ${PAPER_FIELDS}
+  query papers($title: String!) {
+    papers(limit: 1, where: { title: { _like: $title } }, offset: 0) {
+      ...paper_fields
+      cites: cited_by(args: { limit_: ${MAX_CITATIONS_PER_PAPER} }) {
+        ...paper_fields
+        cites: cited_by(args: { limit_: ${MAX_CITATIONS_PER_PAPER} }) {
           ...paper_fields
         }
       }
@@ -68,12 +98,26 @@ export const getPaper = async title => {
     });
   }
 
+
+  // TODO: Clean up with a proper query syntax
+  let parsed = title;
+  const isRev = title.startsWith("~");
+  if (isRev) {
+    parsed = title.slice(1);
+  }
+
   let query;
-  const idMatch = title.match(/id:([a-z0-9]+$)/);
+  const idMatch = parsed.match(/id:([a-z0-9]+$)/);
   if (idMatch) {
-    query = { query: ID_QUERY, variables: { id: idMatch[1] } };
+    query = {
+      query: isRev ? ID_QUERY_REV : ID_QUERY,
+      variables: { id: idMatch[1] },
+    };
   } else {
-    query = { query: TITLE_QUERY, variables: { title: `%${title}%` } };
+    query = {
+      query: isRev ? TITLE_QUERY_REV : TITLE_QUERY,
+      variables: { title: `%${parsed}%` },
+    };
   }
 
   return await client.query(query).then(res => res.data);

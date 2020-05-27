@@ -6,7 +6,9 @@
   import SideBar from "../components/SideBar.svelte";
   import Meta from "../components/Meta.svelte";
 
-  const pageTitle = $currentSearch ? `papergraph - ${$currentSearch}` : `papergraph`;
+  $: pageTitle = $currentSearch
+    ? `papergraph - ${$currentSearch}`
+    : `papergraph`;
 
   function onSearchBoxChange(e) {
     currentSearch.set(e.target.value);
@@ -33,16 +35,23 @@
 
   let examples = [
     ["ResNet", "Deep Residual Learning for Image Recognition"],
-    ["BERT", "Pre-training of Deep Bidirectional Transformers for Language Understanding"],
-    ["EfficientNet", "EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks"],
+    [
+      "BERT",
+      "Pre-training of Deep Bidirectional Transformers for Language Understanding"
+    ],
+    [
+      "EfficientNet",
+      "EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks"
+    ],
     ["MuZero", "Mastering Atari, Go, Chess and Shogi by Planning"],
     ["World Models", "id:ff332c21562c87cab5891d495b7d0956f2d9228b"],
-    ["GPT-2", "Language Models are Unsupervised Multitask Learners"],
+    ["~GPT-2", "~Language Models are Unsupervised Multitask Learners"],
     ["Lottery", "The Lottery Ticket Hypothesis: Finding Sparse"],
+    ["~Troubling Trends", "~Troubling Trends in Machine Learning Scholarship"]
   ];
 </script>
 
-<Meta title="{pageTitle}" />
+<Meta title={pageTitle} />
 
 <div class="w-full h-full flex flex-row">
   <div class="w-1/4 border-r pr-8 mr-8 flex flex-col h-full">
@@ -55,13 +64,13 @@
         value={$currentSearch}
         on:change={onSearchBoxChange} />
       <div class="text-gray-500 text-xs mt-1">
-        Input a (partial) paper title and press enter to search. You can also
-        enter a Semantic Scholar ID with
+        Input a (partial) paper title and press enter to search. Prefix your
+        search with
         <pre class="inline">id:</pre>
-        prefix. The first result will become the root node. Double-click a node to make it the root.
-      </div>
-      <div class="text-gray-500 text-xs">
-        Try:
+        to search for a Semantic Scholar ID. Prefix with
+        <pre class="inline">~</pre>
+        to look for out- instead of in-citations. The first result will become
+        the root node. Double-click a node to make it the root. Try:
         {#each examples as [name, search]}
           <button
             class="text-blue-600"
