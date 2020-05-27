@@ -37,7 +37,7 @@
       class="inline font-bold text-blue-600 uppercase ml-4 pb-1 border-gray-400"
       class:border-b-2={selection === 'help'}
       on:click={() => (selection = 'help')}>
-      Help
+      FAQ
     </button>
   </div>
 

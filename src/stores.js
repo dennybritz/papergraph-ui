@@ -50,7 +50,12 @@ export const currentSubGraph = derived(
         );
       });
 
-      set({ papers, citations });
+      const subGraphData = { papers, citations };
+      if (window) {
+        window.subGraphData = subGraphData;
+      }
+
+      set(subGraphData);
       isLoading.set(false);
     }
   }

@@ -7,6 +7,11 @@
   };
 
   $: authors = paper.authors.map(a => a.author.name).join(", ");
+
+  const findPDF = (paper) => {
+    let urls = paper.pdf_urls.filter(x => x.endsWith(".pdf"));
+    return urls.length > 0 ? [urls[0]] : [];
+  }
 </script>
 
 <div>
@@ -27,11 +32,12 @@
         <a class="break-words" href={paper.doi_url} target="_blank">DOI</a>
       </div>
     {/if}
-    {#if paper.pdf_urls}
+
+    {#each findPDF(paper) as pdf}
       <div class="inline ml-2">
-        <a class="break-words" href={paper.pdf_urls[0]} target="_blank">PDF</a>
+        <a class="break-words" href={pdf} target="_blank">PDF</a>
       </div>
-    {/if}
+    {/each}
   </div>
   <div class="text-xs mt-1">{paper.paper_abstract}</div>
 </div>

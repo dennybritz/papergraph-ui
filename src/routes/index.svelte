@@ -6,6 +6,8 @@
   import SideBar from "../components/SideBar.svelte";
   import Meta from "../components/Meta.svelte";
 
+  const pageTitle = $currentSearch ? `papergraph - ${$currentSearch}` : `papergraph`;
+
   function onSearchBoxChange(e) {
     currentSearch.set(e.target.value);
     // console.log(`fetching: ${$currentSearch}`);
@@ -36,7 +38,7 @@
   ];
 </script>
 
-<Meta title="papergraph - {$currentSearch}" />
+<Meta title="{pageTitle}" />
 
 <div class="w-full h-full flex flex-row">
   <div class="w-1/4 border-r pr-8 mr-8 flex flex-col h-full">
