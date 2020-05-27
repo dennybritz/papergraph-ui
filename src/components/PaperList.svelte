@@ -64,3 +64,5 @@
     </div>
   {/each}
 </div>
+
+<!--  text-gray-900 text-blue-600 -->
