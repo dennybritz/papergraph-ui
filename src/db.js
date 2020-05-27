@@ -1,6 +1,8 @@
 import { gql } from "@apollo/client";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 
+const GRAPHQL_ENDPOINT = process.env["P_GRAPHQL_ENDPOINT"] || "https://papergraph.dennybritz.com/v1/graphql";
+
 export const PAPER_FIELDS = `
 fragment paper_fields on papers {
   id
@@ -56,7 +58,7 @@ export const getPaper = async title => {
     client = new ApolloClient({
       cache: new InMemoryCache(),
       link: new HttpLink({
-        uri: "http://papergraph.dennybritz.com/v1/graphql",
+        uri: GRAPHQL_ENDPOINT,
         fetch,
       }),
     });
