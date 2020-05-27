@@ -65,7 +65,7 @@
         stabilization: {
           iterations: 200
         }
-      }
+      },
       // layout: {
       // 	hierarchical: true,
       // }

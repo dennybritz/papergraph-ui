@@ -1,5 +1,6 @@
 import { writable, derived } from "svelte/store";
 import _ from "lodash";
+import { getPaper } from "./db";
 
 // recursively apply a function to each paper node
 const each_node = (paper, fn) => {
@@ -25,10 +26,7 @@ export const currentSubGraph = derived(
     }
 
     isLoading.set(true);
-    const res = await fetch(
-      `/paper.json?title=${encodeURIComponent($currentSearch)}`
-    );
-    let data = await res.json();
+    let data = await getPaper($currentSearch);
     
     if (data.papers.length == 0) {
       selectedPaper.set(null);
@@ -38,9 +36,9 @@ export const currentSubGraph = derived(
     }
 
     // Flatten the graph structure
-    const root = data.papers[0];
+    let root = data.papers[0];
     if (root) {
-      root.isRoot = true;
+      root = { ...root, isRoot: true };
       selectedPaper.set(root);
       let papers = {};
       let citations = [];

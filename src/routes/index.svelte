@@ -11,7 +11,7 @@
     // console.log(`fetching: ${$currentSearch}`);
   }
 
-  onMount(() => {
+  onMount(async () => {
     currentSearch.subscribe(search => {
       if (window && search) {
         var queryParams = new URLSearchParams(window.location.search);
