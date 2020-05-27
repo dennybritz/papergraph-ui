@@ -14,6 +14,7 @@ jobs:
 
       - name: export
         run: |
+          yarn install
           yarn run export
 
       - name: Publish to Netlify
