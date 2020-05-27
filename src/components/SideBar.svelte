@@ -41,7 +41,7 @@
     </button>
   </div>
 
-  <div class="mt-2 flex-1 overflow-y-scroll">
+  <div class="mt-1 flex-1 overflow-y-scroll">
     {#if selection === 'details' && $selectedPaper}
       <PaperInfo paper={$selectedPaper} />
     {:else if selection === 'list'}

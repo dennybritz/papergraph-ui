@@ -11,6 +11,8 @@ const each_node = (paper, fn) => {
   paper.cites.forEach(cited => each_node(cited, fn));
 };
 
+export const paperListSortOrder = writable("Citations");
+
 export const isLoading = writable(false);
 
 export const currentSearch = writable(
