@@ -49,7 +49,7 @@
     <SideBar />
   </div>
   <div class="w-3/4 flex flex-col">
-    <div class="mb-4">
+    <div class="mb-2">
       <input
         class="border border-gray-400 px-4 py-2 w-full shadow-none outline-none"
         value={$currentSearch}
@@ -58,9 +58,9 @@
         Input a (partial) paper title and press enter to search. You can also
         enter a Semantic Scholar ID with
         <pre class="inline">id:</pre>
-        prefix. The first result will become the root node.
+        prefix. The first result will become the root node. Double-click a node to make it the root.
       </div>
-      <div class="text-gray-500 text-xs mt-1">
+      <div class="text-gray-500 text-xs">
         Try:
         {#each examples as [name, search]}
           <button

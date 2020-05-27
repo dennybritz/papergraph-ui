@@ -22,7 +22,7 @@
   const toggleHierarchical = () => {
     hierarchical = !hierarchical;
     updateGraph($currentSubGraph);
-  }
+  };
 
   selectedPaper.subscribe(paper => {
     // TODO: Fix this
@@ -107,6 +107,14 @@
       }
     });
 
+    network.on("doubleClick", function(params) {
+      const nodeId = this.getNodeAt(params.pointer.DOM);
+      if (nodeId) {
+        const paper = $currentSubGraph.papers[nodeId];
+        currentSearch.set(`id:${paper.id}`);
+      }
+    });
+
     network.once("stabilizationIterationsDone", function() {
       isUpdatingGraph = false;
     });
@@ -135,16 +143,14 @@
 
 {#if !hideGraph}
   <div class="text-xs float-left font-bold">
-  <button 
-    class="text-blue-600 font-bold"
-    on:click={() => toggleHierarchical()}>
-    {#if hierarchical}
-      Toggle Normal Layout
-    {:else}
-      Toggle Hierarchical Layout
-    {/if}
-    
-  </button>
+    <button
+      class="text-blue-600 font-bold"
+      on:click={() => toggleHierarchical()}>
+      {#if hierarchical}
+        Toggle Normal Layout
+      {:else}Toggle Hierarchical Layout{/if}
+
+    </button>
   </div>
 {/if}
 
