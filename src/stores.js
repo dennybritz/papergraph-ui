@@ -1,5 +1,6 @@
 import { writable, derived } from "svelte/store";
 import countBy from "lodash/countBy";
+import sortBy from "lodash/sortBy";
 import { getPaper } from "./db";
 
 // recursively apply a function to each paper node

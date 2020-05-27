@@ -1,7 +1,11 @@
 import { gql } from "@apollo/client";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 
-const GRAPHQL_ENDPOINT = process.env["P_GRAPHQL_ENDPOINT"] || "https://papergraph.dennybritz.com/v1/graphql";
+const GRAPHQL_ENDPOINT =
+  process.env["P_GRAPHQL_ENDPOINT"] ||
+  "https://papergraph.dennybritz.com/v1/graphql";
+
+const MAX_CITATIONS_PER_PAPER = 20;
 
 export const PAPER_FIELDS = `
 fragment paper_fields on papers {
@@ -26,9 +30,9 @@ export const ID_QUERY = gql`
   query papers($id: String!) {
     papers(limit: 1, where: { id: { _eq: $id } }, offset: 0) {
       ...paper_fields
-      cites(args: { limit_: 10 }) {
+      cites(args: { limit_: ${MAX_CITATIONS_PER_PAPER} }) {
         ...paper_fields
-        cites(args: { limit_: 10 }) {
+        cites(args: { limit_: ${MAX_CITATIONS_PER_PAPER} }) {
           ...paper_fields
         }
       }
@@ -41,9 +45,9 @@ export const TITLE_QUERY = gql`
   query papers($title: String!) {
     papers(limit: 1, where: { title: { _like: $title } }, offset: 0) {
       ...paper_fields
-      cites(args: { limit_: 10 }) {
+      cites(args: { limit_: ${MAX_CITATIONS_PER_PAPER} }) {
         ...paper_fields
-        cites(args: { limit_: 10 }) {
+        cites(args: { limit_: ${MAX_CITATIONS_PER_PAPER} }) {
           ...paper_fields
         }
       }
