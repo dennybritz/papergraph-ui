@@ -3,7 +3,8 @@
   export let paper;
 
   const setPaper = () => {
-    currentSearch.set(`id:${paper.id}`);
+    const prefix = $currentSearch.startsWith("~") ? "~" : "";
+    currentSearch.set(`${prefix}id:${paper.id}`);
   };
 
   $: authors = paper.authors.map(a => a.author.name).join(", ");

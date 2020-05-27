@@ -111,7 +111,8 @@
       const nodeId = this.getNodeAt(params.pointer.DOM);
       if (nodeId) {
         const paper = $currentSubGraph.papers[nodeId];
-        currentSearch.set(`id:${paper.id}`);
+        const prefix = $currentSearch.startsWith("~") ? "~" : "";
+        currentSearch.set(`${prefix}id:${paper.id}`);
       }
     });
 
