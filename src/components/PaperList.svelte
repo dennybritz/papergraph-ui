@@ -34,7 +34,7 @@
       class:text-gray-900={$paperListSortOrder === 'InDegree'}
       class:text-blue-600 ={$paperListSortOrder !== 'InDegree'}
       on:click={() => paperListSortOrder.set('InDegree')}>
-      InDegree
+      In-Degree
     </button>
     <button
       class="inline font-bold uppercase ml-4 pb-1"

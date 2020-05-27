@@ -1,5 +1,10 @@
 <script>
-  import { currentSubGraph, selectedPaper, currentSearch, isLoading } from "../stores";
+  import {
+    currentSubGraph,
+    selectedPaper,
+    currentSearch,
+    isLoading
+  } from "../stores";
   import _ from "lodash";
   import { DataSet, Network } from "vis-network/standalone";
   import { onMount } from "svelte";
@@ -7,12 +12,18 @@
   let network;
   let graph_data;
   let isUpdatingGraph = false;
+  let hierarchical = false;
 
   $: hideGraph = $isLoading || isUpdatingGraph;
 
   const makeTitle = paper => {
     return `${paper.title} [${paper.year}] [${paper.num_citations} citations]`;
   };
+
+  const toggleHierarchical = () => {
+    hierarchical = !hierarchical;
+    updateGraph($currentSubGraph);
+  }
 
   selectedPaper.subscribe(paper => {
     // TODO: Fix this
@@ -66,9 +77,9 @@
           iterations: 200
         }
       },
-      // layout: {
-      // 	hierarchical: true,
-      // }
+      layout: {
+        hierarchical: hierarchical
+      }
       // layout: {
       //   hierarchical: {
       //     direction: "UD",
@@ -102,18 +113,16 @@
     });
 
     $selectedPaper && network.selectNodes([$selectedPaper.id]);
-    
   };
 
   onMount(async () => {
     currentSubGraph.subscribe(data => {
-      if(data) {
+      if (data) {
         updateGraph(data);
       }
     });
   });
 </script>
-
 
 {#if hideGraph}
   <div class="w-full text-left">
@@ -125,8 +134,21 @@
   <div>No data found.</div>
 {/if}
 
+{#if !hideGraph}
+  <div class="text-xs float-left font-bold">
+  <button 
+    class="text-blue-600 font-bold"
+    on:click={() => toggleHierarchical()}>
+    {#if hierarchical}
+      Toggle Normal Layout
+    {:else}
+      Toggle Hierarchical Layout
+    {/if}
+    
+  </button>
+  </div>
+{/if}
 
 <div class="w-full h-full">
   <div id="network" class="w-full h-full" />
 </div>
-
