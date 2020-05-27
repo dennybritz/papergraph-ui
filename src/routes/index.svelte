@@ -35,6 +35,7 @@
     ["ResNet", "Deep Residual Learning for Image Recognition"],
     ["BERT", "Pre-training of Deep Bidirectional Transformers for Language Understanding"],
     ["EfficientNet", "EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks"],
+    ["MuZero", "Mastering Atari, Go, Chess and Shogi by Planning"],
     ["World Models", "id:ff332c21562c87cab5891d495b7d0956f2d9228b"],
     ["GPT-2", "Language Models are Unsupervised Multitask Learners"],
     ["Lottery", "The Lottery Ticket Hypothesis: Finding Sparse"],
