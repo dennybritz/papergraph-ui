@@ -3,7 +3,7 @@ import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 
 const GRAPHQL_ENDPOINT =
   process.env["P_GRAPHQL_ENDPOINT"] ||
-  "https://papergraph.dennybritz.com/v1/graphql";
+  "https://34.107.246.233/v1/graphql";
 
 const MAX_CITATIONS_PER_PAPER = 20;
 
